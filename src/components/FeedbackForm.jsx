@@ -8,6 +8,7 @@ import Button from 'react-bootstrap/Button'
 import UserDropdown from './UserDropdown';
 import FormColor from './FormColor';
 import FormBody from './FormBody';
+import FormResponse from './FormResponse';
 import Modal from 'react-bootstrap/Modal'
 
 export default class FeedbackForm extends Component {
@@ -17,6 +18,7 @@ export default class FeedbackForm extends Component {
             volunteer_id: "0",
             color: "green",
             body: "",
+            response: "No",
             modalShow: false,
             postSuccess: false,
             error: ""
@@ -49,7 +51,8 @@ export default class FeedbackForm extends Component {
             body: JSON.stringify({
                 author: this.state.volunteer_id,
                 color: this.state.color,
-                body: this.state.body
+                body: this.state.body,
+                response: this.state.response
             })
         })
             .then((response) => response.json())
@@ -104,6 +107,11 @@ export default class FeedbackForm extends Component {
                                 <Card style={{width: '100%'}} className="mt-4">
                                     <Card.Body>
                                         <FormColor handleColorChange={this.handleColorChange}/>
+                                    </Card.Body>
+                                </Card>
+                                <Card style={{width: '100%'}} className="mt-4">
+                                    <Card.Body>
+                                        <FormResponse handleColorChange={this.handleColorChange}/>
                                     </Card.Body>
                                 </Card>
                                 <Card style={{width: '100%'}} className="mt-4">
