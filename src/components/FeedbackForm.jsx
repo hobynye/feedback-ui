@@ -111,7 +111,7 @@ export default class FeedbackForm extends Component {
                                 </Card>
                                 <Card style={{width: '100%'}} className="mt-4">
                                     <Card.Body>
-                                        <FormResponse handleColorChange={this.handleColorChange}/>
+                                        <FormResponse handleInputChange={this.handleInputChange}/>
                                     </Card.Body>
                                 </Card>
                                 <Card style={{width: '100%'}} className="mt-4">

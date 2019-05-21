@@ -6,10 +6,10 @@ export default class FormResponse extends Component {
         return (
             <Form.Group controlId="formFeedbackResponse">
                 <Form.Label>Do you need to hear back?</Form.Label>
-                <Form.Control as="select" name="response" onChange={this.props.handleInputChange}>
+                <Form.Control as="select" name="response" onChange={this.props.handleInputChange} defaultValue="No">
                     <option value="ASAP">Yes, ASAP please!</option>
                     <option value="Yes">Yes, when you get a chance.</option>
-                    <option value="No" selected>No, just wanted to let you know.</option>
+                    <option value="No">No, just wanted to let you know.</option>
                 </Form.Control>
             </Form.Group>
         )
