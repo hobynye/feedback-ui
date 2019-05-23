@@ -12,17 +12,17 @@ export default class FormColor extends Component {
                     <label className="btn btn-success color-button active"
                            style={{"width": "33.33%"}} onClick={() => {this.props.handleColorChange("green")}} >
                         <Form.Check type="radio" name="color" id="green" autoComplete="off"
-                                    label="Green" value="Green" defaultChecked/>
+                                    label="Green" value="Green" style={{paddingLeft: 0}} defaultChecked/>
                     </label>
                     <label className="btn btn-warning color-button"
                            style={{"width": "33.33%"}} onClick={() => {this.props.handleColorChange("yellow")}}>
                         <Form.Check type="radio" name="color" id="yellow" autoComplete="off"
-                                    label="Yellow" value="Yellow" />
+                                    label="Yellow" value="Yellow" style={{paddingLeft: 0}}/>
                     </label>
                     <label className="btn btn-danger color-button"
                            style={{"width": "33.33%"}} onClick={() => {this.props.handleColorChange("red")}}>
                         <Form.Check type="radio" name="color" id="red" autoComplete="off"
-                                    label="Red" value="Red"/>
+                                    label="Red" value="Red" style={{paddingLeft: 0}}/>
                     </label>
                 </ButtonGroup>
             </Form.Group>

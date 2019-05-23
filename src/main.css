@@ -12,10 +12,6 @@ body {
  background-color: #f7f7f9;
 }
 
-.form-check {
-    padding-left: 0;
-}
-
 .btn.active, .btn:active {
     background-image: none;
     outline: 0;
