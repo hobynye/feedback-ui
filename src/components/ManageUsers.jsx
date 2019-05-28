@@ -20,6 +20,7 @@ export default class ManageUsers extends Component {
             userList: [],
             show: false,
             showEdit: false,
+            showPass: false,
             modalUser: {}
         };
         this.showDeleteModal = this.showDeleteModal.bind(this);
@@ -30,7 +31,7 @@ export default class ManageUsers extends Component {
         this.fetchUsers = this.fetchUsers.bind(this);
         this.toggleAdmin = this.toggleAdmin.bind(this);
         this.showEditModal = this.showEditModal.bind(this);
-
+        this.showPassModal = this.showPassModal.bind(this);
     }
 
     componentWillMount() {
@@ -80,6 +81,7 @@ export default class ManageUsers extends Component {
         this.setState({
             show: false,
             showEdit: false,
+            showPass: false,
         });
     }
 
@@ -143,6 +145,13 @@ export default class ManageUsers extends Component {
         this.setState({
             modalUser: user,
             showEdit: true
+        })
+    }
+
+    showPassModal() {
+        this.setState({
+            showPass: true,
+            showEdit: false
         })
     }
 
@@ -241,23 +250,28 @@ export default class ManageUsers extends Component {
                         <Modal.Body>
                             <Form.Group controlId="formEditName">
                                 <Form.Label>Name</Form.Label>
-                                <Form.Control type="text" defaultValue={this.state.modalUser.name} onChange={this.handleInputChange} name={"name"}/>
+                                <Form.Control type="text" defaultValue={this.state.modalUser.name}
+                                              onChange={this.handleInputChange} name={"name"}/>
                             </Form.Group>
                             <Form.Group controlId="formEditEmail">
                                 <Form.Label>Email</Form.Label>
-                                <Form.Control type="email" defaultValue={this.state.modalUser.email} onChange={this.handleInputChange} name={"email"}/>
+                                <Form.Control type="email" defaultValue={this.state.modalUser.email}
+                                              onChange={this.handleInputChange} name={"email"}/>
                             </Form.Group>
                             <Form.Group controlId="formEditPhone">
                                 <Form.Label>Phone</Form.Label>
-                                <Form.Control type="phone" defaultValue={this.state.modalUser.phone} onChange={this.handleInputChange} name={"phone"}/>
+                                <Form.Control type="phone" defaultValue={this.state.modalUser.phone}
+                                              onChange={this.handleInputChange} name={"phone"}/>
                             </Form.Group>
                             <Form.Group controlId="formEditTitle">
                                 <Form.Label>Title</Form.Label>
-                                <Form.Control type="text" defaultValue={this.state.modalUser.title} onChange={this.handleInputChange} name={"title"}/>
+                                <Form.Control type="text" defaultValue={this.state.modalUser.title}
+                                              onChange={this.handleInputChange} name={"title"}/>
                             </Form.Group>
                             <Form.Group controlId="formEditColor">
                                 <Form.Label>Color</Form.Label>
-                                <Form.Control as="select" name={"color"} onChange={this.handleInputChange} defaultValue={this.state.modalUser.color}>
+                                <Form.Control as="select" name={"color"} onChange={this.handleInputChange}
+                                              defaultValue={this.state.modalUser.color}>
                                     <option value={""}>None</option>
                                     <option>Red</option>
                                     <option>Orange</option>
@@ -270,9 +284,10 @@ export default class ManageUsers extends Component {
                             </Form.Group>
                             <Form.Group controlId="formEditLetter">
                                 <Form.Label>Letter</Form.Label>
-                                <Form.Control type="text" defaultValue={this.state.modalUser.letter} onChange={this.handleInputChange} name={"letter"}/>
+                                <Form.Control type="text" defaultValue={this.state.modalUser.letter}
+                                              onChange={this.handleInputChange} name={"letter"}/>
                             </Form.Group>
-                            {(this.state.modalUser.admin && this.state.modalUser.phone)&&
+                            {(this.state.modalUser.admin && this.state.modalUser.phone) &&
                             <Form.Group>
                                 <Form.Check
                                     disabled={!(this.state.modalUser.phone.length === 10)}
@@ -286,13 +301,33 @@ export default class ManageUsers extends Component {
                         </Modal.Body>
                         <Modal.Footer>
                             {!this.state.modalUser.admin &&
-                            <Button variant="warning" onClick={() => this.toggleAdmin(true)}><i className="fas fa-shield-alt"></i> Make Admin</Button>}
+                            <Button variant="warning" onClick={() => this.toggleAdmin(true)}><i
+                                className="fas fa-shield-alt"></i> Make Admin</Button>}
                             {this.state.modalUser.admin &&
-                            <Button variant="secondary"><i className="fas fa-key"></i> Change Password</Button>}
+                            <Button variant="secondary" onClick={() => this.showPassModal()}><i className="fas fa-key"></i> Change Password</Button>}
                             {this.state.modalUser.admin &&
-                            <Button variant="danger" onClick={() => this.toggleAdmin(false)}><i className="fas fa-shield-alt"></i> Remove Admin</Button>
+                            <Button variant="danger" onClick={() => this.toggleAdmin(false)}><i
+                                className="fas fa-shield-alt"></i> Remove Admin</Button>
 
                             }
+                            <Button variant="primary" type="submit">
+                                Submit
+                            </Button>
+                        </Modal.Footer>
+                    </Form>
+                </Modal>
+                <Modal show={this.state.showPass} onHide={this.handleClose}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Change {this.state.modalUser.name}'s Password</Modal.Title>
+                    </Modal.Header>
+                    <Form onSubmit={this.handleSubmit}>
+                        <Modal.Body>
+                            <Form.Group controlId="formChangePassword">
+                                <Form.Label>Password</Form.Label>
+                                <Form.Control type="password" onChange={this.handleInputChange} name={"password"}/>
+                            </Form.Group>
+                        </Modal.Body>
+                        <Modal.Footer>
                             <Button variant="primary" type="submit">
                                 Submit
                             </Button>

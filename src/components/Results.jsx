@@ -4,20 +4,34 @@ import Card from 'react-bootstrap/Card'
 import Col from 'react-bootstrap/Col'
 import Row from 'react-bootstrap/Row'
 import Navigation from './Navigation'
+import Button from 'react-bootstrap/Button'
 
-const FeedbackItem = ({feedback}) => (
+const FeedbackItem = ({feedback, showHandled, markHandled}) => (
     <>
-        {feedback.map(feedback => (
-            <Card bg={feedback.severity} text="white" style={{width: '100%', marginBottom: "15px"}}>
-                <Card.Header>
-                    <strong>{feedback.author}</strong>
-                    <p style={{display: "block"}}>{feedback.role} {feedback.color} {feedback.letter} - {feedback.submitted}</p>
-                </Card.Header>
-                <Card.Body>
-                    <Card.Title>{feedback.body}</Card.Title>
-                </Card.Body>
-            </Card>
-        ))}
+        {feedback.map(feedback => {
+            if (!feedback.handled || showHandled)
+                return (
+                    <Card bg={feedback.severity} text="white" style={{width: '100%', marginBottom: "15px"}}>
+                        <Card.Header style={{display: "inline-flex"}}>
+                            <div style={{width: "90%", display: "inline-block"}}>
+                            <strong>{feedback.author} {feedback.handled}</strong>
+                            <p style={{display: "block"}}>{feedback.role} {feedback.color} {feedback.letter} - {feedback.submitted}</p>
+                            </div>
+                            <div style={{width: "10%", display: "inline-block"}}>
+                            <button type="button" onClick={() => {
+                                markHandled(feedback.key, feedback.id);
+                            }} className="close" aria-label="Close" style={{paddingTop: "10%"}}>
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                            </div>
+                        </Card.Header>
+                        <Card.Body>
+                            <Card.Title>{feedback.body}</Card.Title>
+                        </Card.Body>
+                    </Card>
+                );
+            return (<></>)
+        })}
     </>
 );
 
@@ -27,8 +41,11 @@ export default class Results extends Component {
         this.state = {
             user: "",
             loading: true,
-            feedback: []
-        }
+            feedback: [],
+            showHandled: false
+        };
+        this.toggleShowHandled = this.toggleShowHandled.bind(this);
+        this.markHandled = this.markHandled.bind(this);
     }
 
     componentWillMount() {
@@ -49,11 +66,30 @@ export default class Results extends Component {
     }
 
     componentDidMount() {
-        this.interval = setInterval(() => {this.fetchFeedback()}, 30000);
+        this.interval = setInterval(() => {
+            this.fetchFeedback()
+        }, 30000);
     }
 
     componentWillUnmount() {
         clearInterval(this.interval);
+    }
+
+    markHandled(key, fid) {
+        fetch('/api/feedback/' + fid, {
+            method: 'PUT'
+        })
+            .then(() => {
+                this.fetchFeedback();
+            })
+            .catch((error) => console.log(error));
+
+    }
+
+    toggleShowHandled() {
+        this.setState({
+            showHandled: !this.state.showHandled
+        })
     }
 
     fetchFeedback = () => {
@@ -75,8 +111,10 @@ export default class Results extends Component {
                         timestamp.setUTCSeconds(feedback[i]["submitted"]);
                         feedbackArray.push(
                             {
-                                key: feedback[i]["id"],
+                                key: i,
+                                id: feedback[i]["id"],
                                 author: feedback[i]["author"],
+                                handled: feedback[i]["handled"],
                                 role: feedback[i]["role"],
                                 color: feedback[i]["color"],
                                 letter: feedback[i]["letter"],
@@ -103,8 +141,20 @@ export default class Results extends Component {
                 <Navigation currentUser={this.state.user}/>
                 <Container className={"mt-3"}>
                     <Row>
+                        <Col xl className={"mb-2 float-right"}>
+                            {this.state.showHandled &&
+                            <Button className={"float-right"} onClick={() => this.toggleShowHandled()}>
+                                <i className="fas fa-eye-slash"></i> Hide Handled Feedback
+                            </Button>}
+                            {!this.state.showHandled &&
+                            <Button className={"float-right"} onClick={() => this.toggleShowHandled()}>
+                                <i className="fas fa-eye"></i> Show Handled Feedback
+                            </Button>}
+                        </Col>
+                    </Row>
+                    <Row>
                         <Col xl>
-                            <FeedbackItem feedback={this.state.feedback}/>
+                            <FeedbackItem feedback={this.state.feedback} showHandled={this.state.showHandled} markHandled={this.markHandled}/>
                         </Col>
                     </Row>
                 </Container>
