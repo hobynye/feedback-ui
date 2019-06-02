@@ -101,7 +101,7 @@ export default class Results extends Component {
             Green: "success"
         };
         setTimeout(() => {
-            fetch("/api/feedback?qty=100")
+            fetch("/api/feedback")
                 .then(response => response.json())
                 .then((jsonData) => {
                     const feedback = jsonData["results"];
@@ -143,13 +143,16 @@ export default class Results extends Component {
                     <Row>
                         <Col xl className={"mb-2 float-right"}>
                             {this.state.showHandled &&
-                            <Button className={"float-right"} onClick={() => this.toggleShowHandled()}>
+                            <Button className={"float-right ml-2 mb-2"} onClick={() => this.toggleShowHandled()}>
                                 <i className="fas fa-eye-slash"></i> Hide Handled Feedback
                             </Button>}
                             {!this.state.showHandled &&
-                            <Button className={"float-right"} onClick={() => this.toggleShowHandled()}>
+                            <Button className={"float-right ml-2 mb-2"} onClick={() => this.toggleShowHandled()}>
                                 <i className="fas fa-eye"></i> Show Handled Feedback
                             </Button>}
+                            <a className={"btn btn-success float-right"} href={"/api/feedback?download=true"}>
+                                <i className="fas fa-cloud-download-alt"></i> Download
+                            </a>
                         </Col>
                     </Row>
                     <Row>
